@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dejimons</title>
+</head>
+
+<body>
+
+    <main class="container">
+
+        <!-- TOP PADDING -->
+        <div class="p-5"></div>
+
+        <!-- VIEW AVAILABLE DEJIMONS -->
+        <section class="card" id="viewSection">
+            <div class="card-body">
+                <h2>Dejimons</h2>
+                <table id="dejimons" class="table">
+                    <tr>
+                        <th scope="col">name</th>
+                        <th scope="col">Type</th>
+                        <th scope="col"> </th>
+                        <th scope="col"> </th>
+                    </tr>
+                </table>
+                <button onclick="handleAdd(event)">Add</button>
+            </div>
+        </section>
+
+        <!-- ADD CARD INFORMATION -->
+        <section id="addSection" class="card text-center">
+            <div class="card-body">
+                <h2>Add a Dejimon</h2>
+                <table class="table">
+                    <tr>
+                        <td>Name</td>
+                        <td><input id="addName" type="text"></td>
+                    </tr>
+                    <tr>
+                        <td>Height</td>
+                        <td><input id="addHeight" type="text"></td>
+                    </tr>
+                    <tr>
+                        <td>Weight</td>
+                        <td><input id="addWeight" type="text"></td>
+                    </tr>
+                    <tr>
+                        <td>Type</td>
+                        <td>
+                            <select name="ability" id="addType" onchange="updateAbilityDescription(event)">
+                                <option value="yorkshire">Yorkshire</option>
+                                <option value="lean">Lean</option>
+                                <option value="potbelly">Potbelly</option>
+                            </select>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td id="addDescription">dynamic</td>
+                        <td><input type="text" id="addAbility"></td>
+                    </tr>
+                    <tr>
+                        <td>Overall</td>
+                        <td id="addOverall"></td>
+                    </tr>
+                </table>
+                <button onclick="addDejimon()">Add</button>
+            </div>
+        </section>
+
+        <!-- VIEW INFO CARD -->
+        <section class="card text-center" id="infoSection">
+            <div class="card-body">
+                <h2>View Info</h2>
+                <table class="table" id="info">
+                    <tr>
+                        <td>Name</td>
+                        <td id="name"></td>
+                    </tr>
+                    <tr>
+                        <td>Height</td>
+                        <td id="height"></td>
+                    </tr>
+                    <tr>
+                        <td>Weight</td>
+                        <td id="weight"></td>
+                    </tr>
+                    <tr>
+                        <td>Type</td>
+                        <td id="type"></td>
+                    </tr>
+                    <tr>
+                        <td id="abilityDescription">Ability</td>
+                        <td id="score"></td>
+                    </tr>
+                    <tr>
+                        <td>Overall</td>
+                        <td id="overall"></td>
+                    </tr>
+                </table>
+                <button>Return</button>
+            </div>
+        </section>
+
+    </main>
+
+
+    <script src="index.js"></script>
+</body>
+
+</html>

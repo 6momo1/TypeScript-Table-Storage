@@ -32,27 +32,17 @@ class Dejimon {
         }
     }
 }
-function calcOverall(deji) {
-    var overall = Math.round((deji.height + deji.weight + deji.ability) / 3);
-    console.log(overall);
-}
+var porkichu = new Dejimon("porkichu", dejiType.Potbelly, 170, 60, 90);
+var dogychu = new Dejimon("Doggy", dejiType.Lean, 50, 100, 70);
+var dejimons = [];
+dejimons.push(porkichu, dogychu);
 function searchDejiIndex(name) {
     for (var deji in dejimons) {
         if (name == dejimons[deji].name) {
             return deji;
         }
     }
-    return -1;
 }
-var porkichu = new Dejimon("porkichu", dejiType.Potbelly, 170, 60, 90);
-var dogychu = new Dejimon("Doggy", dejiType.Lean, 50, 100, 70);
-// calcOverall(porkichu)
-// porkichu.getAbility()
-var dejimons = [];
-dejimons.push(porkichu, dogychu);
-// console.log(dejimons)
-// searchDejiIndex("Doggy")
-// console.log(dejimons[1].getAbility())
 function updateMainTable() {
     var table = document.getElementById("dejimons");
     var s = '';
@@ -66,10 +56,13 @@ function updateMainTable() {
         </tr>
         `;
     });
-    table.innerHTML += s;
+    table.innerHTML = s;
 }
 function handleMoreInfo(e) {
-    console.log("more info button clicked");
+    var name = e.target.parentNode.parentNode.children[0].innerHTML;
+    console.log(name);
+    var index = searchDejiIndex(name);
+    updateInfoTable(dejimons[index]);
 }
 function handleDelete(e) {
     console.log("delete dejimon clicked");
@@ -84,7 +77,7 @@ function updateInfoTable(dejimon) {
     var weight = document.getElementById("weight");
     var type = document.getElementById("type");
     var abilityDescription = document.getElementById("abilityDescription");
-    var abilityScore = document.getElementById("abilityScore");
+    var abilityScore = document.getElementById("score");
     var overall = document.getElementById("overall");
     name.innerHTML = dejimon.name;
     height.innerHTML = dejimon.height.toString();
@@ -98,5 +91,44 @@ function hideCard(sectionId) {
     var view = document.getElementById(sectionId);
     view.style.display = "none";
 }
-// updateInfoTable(dejimons[1])
+function addDejimon() {
+    var name = document.getElementById("addName");
+    var height = document.getElementById("addHeight");
+    var weight = document.getElementById("addWeight");
+    var type = document.getElementById("addType");
+    var description = document.getElementById("addDescription");
+    var ability = document.getElementById("addAbility");
+    var overall = document.getElementById("addOverall");
+    if (typeof name.value != "string" && name == "") {
+        return alert("Please enter a valid name. ");
+    }
+    if (typeof parseInt(height.value) != "number" && isNaN(parseInt(height.value)) != null) {
+        return alert("Please enter a valid height.");
+    }
+    if (typeof parseInt(weight.value) != "number" && parseInt(weight.value) != null) {
+        return alert("Please enter a valid weight.");
+    }
+    if (typeof parseInt(ability.value) != "number" && parseInt(ability.value) != null) {
+        return alert("Please enter a valid ability score.");
+    }
+    var newDeji = new Dejimon(name.value, type.value, parseInt(height.value), parseInt(weight.value), parseInt(ability.value));
+    console.log(name.value, type.value, parseInt(height.value), parseInt(weight.value), parseInt(ability.value));
+    dejimons.push(newDeji);
+    updateMainTable();
+    console.log(typeof name.value, typeof type.value, typeof parseInt(height), typeof parseInt(weight.value), typeof parseInt(ability.value));
+}
+function updateAbilityDescription(e) {
+    var type = e.target.value;
+    var description = document.getElementById("addDescription");
+    console.log(type, description);
+    if (type == "yorkshire") {
+        description === null || description === void 0 ? void 0 : description.innerHTML = abilityDescription.Yorkshire + " Ability";
+    }
+    else if (type == "lean") {
+        description === null || description === void 0 ? void 0 : description.innerHTML = abilityDescription.Lean + " Ability";
+    }
+    else {
+        description === null || description === void 0 ? void 0 : description.innerHTML = abilityDescription.Potbelly + " Ability";
+    }
+}
 updateMainTable();
