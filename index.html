@@ -18,55 +18,63 @@
         <div class="p-5"></div>
 
         <!-- VIEW AVAILABLE DEJIMONS -->
-        <section class="card" id="viewSection">
+        <section class="card" id="viewSection" style="margin-top:100px;">
             <div class="card-body">
+                <h2>Dejimons</h2>
                 <table id="dejimons" class="table">
-                    <tr>
-                        <th scope="col">name</th>
-                        <th scope="col">Type</th>
-                        <th scope="col"> </th>
-                        <th scope="col"> </th>
-                    </tr>
+
                 </table>
-                <button class="col-1" onclick="handleAdd(event)">Add</button>
+                <button onclick="handleAdd(event)">Add</button>
             </div>
         </section>
 
         <!-- ADD CARD INFORMATION -->
-        <section id="addSection" class="card text-center">
+        <section id="addSection" class="card text-center" style="display:none;">
             <div class="card-body">
+                <h2>Add a Dejimon</h2>
                 <table class="table">
                     <tr>
                         <td>Name</td>
-                        <td><input type="text"></td>
+                        <td><input id="addName" type="text"></td>
                     </tr>
                     <tr>
                         <td>Height</td>
-                        <td><input type="text"></td>
+                        <td><input id="addHeight" type="text" onchange="updateOverallScore()"></td>
                     </tr>
                     <tr>
                         <td>Weight</td>
-                        <td><input type="text"></td>
+                        <td><input id="addWeight" type="text" onchange="updateOverallScore()"></td>
                     </tr>
                     <tr>
                         <td>Type</td>
-                        <td><input type="text"></td>
+                        <td>
+                            <select name="ability" id="addType" onchange="updateAbilityDescription(event)">
+                                <option value="yorkshire">Yorkshire</option>
+                                <option value="lean">Lean</option>
+                                <option value="potbelly">Potbelly</option>
+                            </select>
+                        </td>
+
                     </tr>
                     <tr>
-                        <td>dynamic</td>
-                        <td><input type="text"></td>
+                        <td id="addDescription">--Dynamic--</td>
+                        <td><input type="text" id="addAbility" onchange="updateOverallScore()"></td>
                     </tr>
                     <tr>
-                        <td>dynamic</td>
-                        <td><input type="text"></td>
+                        <td>Overall</td>
+                        <td id="addOverall">--Dynamic--</td>
                     </tr>
                 </table>
+
+                <button onclick="displayViewOnly()">Return</button>
+                <button onclick="addDejimon()">Add</button>
             </div>
         </section>
 
         <!-- VIEW INFO CARD -->
-        <section class="card text-center" id="infoSection">
+        <section class="card text-center" id="infoSection" style="display:none;">
             <div class="card-body">
+                <h2>View Info</h2>
                 <table class="table" id="info">
                     <tr>
                         <td>Name</td>
@@ -86,13 +94,14 @@
                     </tr>
                     <tr>
                         <td id="abilityDescription">Ability</td>
-                        <td id="abilityScore"></td>
+                        <td id="score"></td>
                     </tr>
                     <tr>
                         <td>Overall</td>
                         <td id="overall"></td>
                     </tr>
                 </table>
+                <button onclick="handleReturn(event)">Return</button>
             </div>
         </section>
 
