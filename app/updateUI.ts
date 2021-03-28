@@ -1,82 +1,3 @@
-enum dejiType {
-    yorkshire = "yorkshire",
-    lean = "lean",
-    potbelly = "potbelly"
-}
-
-enum abilityDescription {
-    yorkshire = "Water and Ice",
-    lean = "Fire and Charm",
-    potbelly = "Electric"
-}
-
-class Dejimon {
-    name: string
-    type: string
-    height: number
-    weight: number
-    ability: number
-    overall: number
-    getAbility(){
-        if (this.type == "yorkshire"){
-            return abilityDescription.yorkshire
-        } else if (this.type == "lean"){
-            return abilityDescription.lean
-        } else if (this.type == "potbelly"){
-            return abilityDescription.potbelly
-        }
-    }
-    constructor(name:string,t:string,height:number,weight:number,ability:number){
-        this.name = name
-        this.type = t
-        this.height = height
-        this.weight = weight
-        this.ability = ability
-        this.overall = Math.round((height + weight + ability)/3)
-    }
-}
-
-
-
-class DejiStorage{
-    //STORAGE MANAGEMENT FOR EASIER USE
-    storage = window.localStorage
-
-    add(deji:Dejimon){
-        //add dejimon to local storage
-        this.storage.setItem(deji.name, JSON.stringify(deji))
-        console.log(`${deji.name} added to storage.`)
-    }
-
-    get(name:string){
-        //return Dejimon object from a given name
-        var deji:string = <string>this.storage.getItem(name)
-        console.log(`${name} returned.`)
-        var obj = JSON.parse(deji)
-        var newDeji:Dejimon = new Dejimon(obj.name,obj.type,obj.height,obj.weight,obj.ability)
-        return newDeji
-    }
-    delete(name:string){
-        //delete a Dejimon from a given name
-        this.storage.removeItem(name)
-        console.log(`${name} deleted.`)
-    }
-
-    getAll(){
-        //returns an array of Dejimons
-        var dejimons:Array<Dejimon> = []
-        for (let i = 0; i < this.storage.length; i++) {
-            const key:string = <string>this.storage.key(i)
-            const value:Dejimon = this.get(key)
-            var deji = new Dejimon(value.name,value.type,value.height,value.weight,value.ability)
-            dejimons.push(deji)
-        }
-        return dejimons
-    }
-}
-
-
-
 function updateMainTable(){
     //populate the view table
     var table:Element = <Element>document.getElementById("dejimons")
@@ -91,7 +12,7 @@ function updateMainTable(){
     dejiArray.forEach(dejimon => {
         s += `
         <tr>
-            <td>${dejimon.name}</td>
+            <td id="${dejimon.id}">${dejimon.name}</td>
             <td>${dejimon.type}</td>
             <td><button onclick='handleMoreInfo(event)'>More Info</button></td>
             <td><button onclick='handleDelete(event)'>Delete</button></td>
@@ -100,33 +21,6 @@ function updateMainTable(){
     });
     table.innerHTML = s
 }
-
-
-
-
-function handleMoreInfo(e:Element){
-    //update Info Card
-    var name:string = e.target.parentNode.parentNode.children[0].innerHTML
-    var deji = dejimons.get(name)
-    updateInfoTable(deji)
-    displayInfoOnly()
-}
-
-function handleDelete(e:Element ){
-    var name:string = e.target.parentNode.parentNode.children[0].innerHTML
-    dejimons.delete(name)
-    updateMainTable()
-}
-
-function handleAdd(e:Element){
-    displayAddOnly()
-}
-
-
-function handleReturn(e:Element){
-    displayViewOnly()
-}
-
 
 
 function updateInfoTable(dejimon:Dejimon){
@@ -147,7 +41,6 @@ function updateInfoTable(dejimon:Dejimon){
     abilityDescription.innerHTML = dejimon.getAbility() + " Ability"
     abilityScore.innerHTML = dejimon.ability.toString()
     overall.innerHTML = dejimon.overall.toString()
-    console.log(typeof dejimon)
 }
 
 
@@ -181,10 +74,9 @@ function addDejimon(){
         return alert("Please enter an ability value between 0 to 100.")
     }
     
-
-
     //create new Dejimon to add
     var newDeji = new Dejimon(
+        generateId(),
         name.value,
         type.value,
         parseInt(height.value),
@@ -210,7 +102,7 @@ function addDejimon(){
 
 
 
-function updateAbilityDescription(e:Element){
+function updateAbilityDescription(e:any){
     //Dynamically update the ability description in Add Form
     var type = e.target.value
     var description:Element | null = <HTMLInputElement>document.getElementById("addDescription")
@@ -233,54 +125,10 @@ function updateOverallScore(){
 
     //Calculate the overall score, then display it on the card
     var num = Math.round((parseInt(height) + parseInt(weight) + parseInt(ability))/3)
-    overall.innerHTML = num.toString()
+    if (isNaN(num)){
+        overall.innerHTML = "<p style='font-size:13px'>Please enter the height, weight, and the ability score to see the overall score.</p>"
+    } else{
+        overall.innerHTML = num.toString()
+    }
 }
 
-
-function capitalizeFirstLetter(string:string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  }
-
-
-
-function displayViewOnly(){
-    var view:Element = <Element>document.getElementById("viewSection")
-    var add:Element = <Element>document.getElementById("addSection")
-    var info:Element = <Element>document.getElementById("infoSection")
-
-    view.style.display = "block"
-    add.style.display = "none"
-    info.style.display = "none"
-
-    
-}
-
-function displayAddOnly(){
-    var view:Element = <Element>document.getElementById("viewSection")
-    var add:Element = <Element>document.getElementById("addSection")
-    var info:Element = <Element>document.getElementById("infoSection")
-
-    add.style.display = "block"
-    view.style.display = "none"
-    info.style.display = "none"
-}
-
-function displayInfoOnly(){
-    var view:Element = <Element>document.getElementById("viewSection")
-    var add:Element = <Element>document.getElementById("addSection")
-    var info:Element = <Element>document.getElementById("infoSection")
-
-    info.style.display = "block"
-    add.style.display = "none"
-    view.style.display = "none"
-}
-
-let dejimons = new DejiStorage()
-updateMainTable()
-
-
-//run the following code to test storage
-// var porkichu = new Dejimon("porkichu",dejiType.potbelly,170, 60, 90)
-// var dogychu = new Dejimon("Doggy",dejiType.lean,50, 100, 70)
-// dejimons.add(porkichu)
-// dejimons.add(dogychu)
